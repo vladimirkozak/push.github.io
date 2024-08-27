@@ -19,13 +19,5 @@
         "purpose": "maskable"
       }
     ],
-    "description": "",
-    "screenshots": [
-      {
-        "src": "icons/8gEFyiIJp7Y.jpg",
-        "sizes": "1024x1024",
-        "type": "image/png",
-        "purpose": "maskable"
-      }
-    ]
+    "description": ""
   }
