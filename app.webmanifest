@@ -1,0 +1,31 @@
+{
+    "name": "push",
+    "short_name": "push",
+    "start_url": "./",
+    "orientation": "portrait",
+    "theme_color": "#fff",
+    "scope": "./",
+    "display": "standalone",
+    "icons": [
+      {
+        "src": "icons/icon-512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      },
+      {
+        "src": "icons/icon-1024.png",
+        "sizes": "1024x1024",
+        "type": "image/png",
+        "purpose": "maskable"
+      }
+    ],
+    "description": "",
+    "screenshots": [
+      {
+        "src": "icons/8gEFyiIJp7Y.jpg",
+        "sizes": "1024x1024",
+        "type": "image/png",
+        "purpose": "maskable"
+      }
+    ]
+  }
