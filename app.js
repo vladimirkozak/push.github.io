@@ -30,24 +30,26 @@ function configurePushSub() {
     }
 
     let reg;
-
     navigator.serviceWorker.ready
         .then((swreg) => {
             reg = swreg;
             return swreg.pushManager.getSubscription();
         }).then((sub) => {
             if (sub === null) {
+                
                 // Create a new subscription
                 const vapidPublicKey = 'BBTEbxoHqW7fW7UL4n62xA5OKp0g1vuJJVZrZH73sCwlhj6e4xyOY00cLxGVvqYeJokG3CdOZcDkQBnGvZ9QHcw';
                 const convertedVapidPublicKey = urlB64ToUint8Array(vapidPublicKey);
-                reg.pushManager.subscribe({
+                
+                return reg.pushManager.subscribe({
                     userVisibleOnly: true,
                     applicationServerKey: convertedVapidPublicKey
                 });
             } else {
+                
                 // We have a subscription
             }
-        }).then((newSub) => {
+        }).then((newSub) => {            
             return fetch('https://sotbit-b2c-default-rtdb.firebaseio.com/subscriptions.json', {
                 method: "POST",
                 headers: {
@@ -58,7 +60,6 @@ function configurePushSub() {
             })
         }).then((res) => {
             if (res.ok) {
-                console.log(res);
                 displayConfirmNotification();
             }
         }).catch((error) => {
@@ -83,7 +84,7 @@ function askForNotificationPermission() {
 function urlB64ToUint8Array(base64String) {
     const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
     const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/')
-    const rawData = atob(base64)
+    const rawData = window.atob(base64)
     const outputArray = new Uint8Array(rawData.length)
     for (let i = 0; i < rawData.length; ++i) {
         outputArray[i] = rawData.charCodeAt(i)
