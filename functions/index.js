@@ -1,4 +1,16 @@
+const admin = require("firebase-admin");
 const webpush = require('web-push');
+
+var serviceAccount = require("./sotbit-b2c-firebase-adminsdk-vwa79-65c0443850.json");
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://sotbit-b2c-default-rtdb.firebaseio.com/"
+});
+
+
+var db = admin.database();
+var ref = db.ref("subscriptions");
 
 webpush.setVapidDetails(
     'mailto:uladzimirkoza@gmail.com',
@@ -6,14 +18,19 @@ webpush.setVapidDetails(
     'krsxO4L1TzcKMqvMlBPucB-Q_ZCihxWUq4ZmjIAx1k0'
 );
 
-const pushConfig = {
-    endpoint: 'https://web.sandbox.push.apple.com/gLdA2y_k3F9DgiNhZBkMNU-8x2hnLaGCBYyrmRQNCi4vZjLYKUVPhtcVzF5XYLY9pcebB1nm5d-KbJ5HVxN2gFTbrHL27lrsbSscsD4HtP61iSxi5qxORyN3ZKVDgP-fI5uXHDVN_OQzZnoUQVwS0ETXI_9TTWyqSVMQTF9d6ZU',
-    keys: {
-        auth: 'IaWGJsPEGVmd1LcSKObfRQ',
-        p256dh: 'BNmTJAE9gEO1uCmL5z67OsR1u3S5BUmfbgbrljZSXOKgINkeSo7nESJpu7H8i3MqHgk9w-MKeO1SLko-AU-jDfM',
-    }
-};
+ref.once("value", function (snapshot) {
+    const subscriptions = snapshot.val();
+    Object.values(subscriptions).forEach((sub) => {
+        const pushConfig = {
+            endpoint: sub.endpoint,
+            keys: {
+                auth: sub.keys.auth,
+                p256dh: sub.keys.p256dh,
+            }
+        };
 
-webpush.sendNotification(pushConfig, JSON.stringify({title: 'New Post', content: 'New Post added'}))
-    .catch((err) => console.log(err)
-)
+        webpush.sendNotification(pushConfig, JSON.stringify({ title: 'New Post', content: 'New Post added' }))
+            .catch((err) => console.log("error: ",err)
+        );
+    });
+});

@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "firebase-admin": "^12.4.0",
     "web-push": "^3.6.7"
   }
 }

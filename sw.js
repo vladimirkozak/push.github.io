@@ -14,7 +14,6 @@ self.addEventListener('notificationclick', (event) => {
 
 self.addEventListener('notificationclose', (event) => {
     console.log('notification was close', event);
-    
 });
 
 self.addEventListener('push', (event) => {
