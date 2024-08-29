@@ -31,7 +31,11 @@ ref.once("value", function (snapshot) {
             }
         };
 
-        const promise = webpush.sendNotification(pushConfig, JSON.stringify({ title: 'New Post', content: 'New Post added' }))
+        const promise = webpush.sendNotification(pushConfig, JSON.stringify({
+            title: 'New Post',
+            content: 'New Post added',
+            openUrl: '/help'
+        }))
             .catch((err) => console.log("error: ",err)
         );
 

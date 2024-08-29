@@ -8,6 +8,22 @@ self.addEventListener('notificationclick', (event) => {
         notification.close();
     } else {
         console.log(action);
+        event.waitUntil(
+            clients.matchAll()
+                .then((clis) => {
+                    const client = clis.find((c) => {
+                        return c.visibilityState === 'visible';
+                    });
+
+                    if (client !== undefined) {
+                        client.navigate(notification.data.url);
+                        client.focus();
+                    } else {
+                        clients.openWindow(notification.data.url);
+                    }
+                    notification.close();
+                })
+        )
         notification.close();
     }
 });
@@ -19,10 +35,9 @@ self.addEventListener('notificationclose', (event) => {
 self.addEventListener('push', (event) => {
     console.log("Push notification received", event);
 
-    const data = {title: 'New!', content: 'Something new happened!'};
+    const data = {title: 'New!', content: 'Something new happened!', openUrl: '/'};
 
     if (event.data) {
-        console.log(123);
         
         // data = JSON.parse(event.data.text());
     }
@@ -31,6 +46,9 @@ self.addEventListener('push', (event) => {
         body: data.content,
         icon: '/icons/icon-512.png',
         badge: '/icons/icon-512.png',
+        data: {
+            url: data.openUrl
+        }
     };
 
     event.waitUntil(
