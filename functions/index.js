@@ -20,6 +20,8 @@ webpush.setVapidDetails(
 
 ref.once("value", function (snapshot) {
     const subscriptions = snapshot.val();
+    const promises = [];
+
     Object.values(subscriptions).forEach((sub) => {
         const pushConfig = {
             endpoint: sub.endpoint,
@@ -29,8 +31,18 @@ ref.once("value", function (snapshot) {
             }
         };
 
-        webpush.sendNotification(pushConfig, JSON.stringify({ title: 'New Post', content: 'New Post added' }))
+        const promise = webpush.sendNotification(pushConfig, JSON.stringify({ title: 'New Post', content: 'New Post added' }))
             .catch((err) => console.log("error: ",err)
         );
+
+        promises.push(promise);
     });
+
+    Promise.all(promises).then(() => {
+        console.log('all notifications have been sent');
+        process.exit(0);
+    }).catch((err) => {
+        console.log('sending error', err);
+        process.exit(1);
+    })
 });
