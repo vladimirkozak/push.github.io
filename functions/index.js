@@ -1,7 +1,7 @@
 const admin = require("firebase-admin");
 const webpush = require('web-push');
 
-var serviceAccount = require("./sotbit-b2c-firebase-adminsdk-vwa79-65c0443850.json");
+var serviceAccount = require("./sotbit-b2c-firebase-adminsdk-vwa79-c4eacbced3.json");
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
