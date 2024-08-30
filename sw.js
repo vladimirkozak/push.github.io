@@ -35,6 +35,11 @@ self.addEventListener('notificationclose', (event) => {
 self.addEventListener('push', (event) => {
     console.log("Push notification received", event);
 
+    if (navigator.setAppBadge) {
+        const count = 5;
+        navigator.setAppBadge(count);
+    }
+
     const data = {title: 'New!', content: 'Something new happened!', openUrl: '/'};
 
     if (event.data) {
