@@ -2,12 +2,9 @@ self.addEventListener('notificationclick', (event) => {
     const notification = event.notification;
     const action = event.action;
 
-    console.log(notification);
-
     if (action === 'confirm') {
         notification.close();
     } else {
-        console.log(action);
         event.waitUntil(
             clients.matchAll()
                 .then((clis) => {
@@ -33,30 +30,33 @@ self.addEventListener('notificationclose', (event) => {
 });
 
 self.addEventListener('push', (event) => {
-    console.log("Push notification received", event);
-
-    if (navigator.setAppBadge) {
-        const count = 5;
-        navigator.setAppBadge(count);
-    }
-
-    const data = {title: 'New!', content: 'Something new happened!', openUrl: '/'};
+    let data;
 
     if (event.data) {
-        
         // data = JSON.parse(event.data.text());
-    }
+        data = { title: 'New!', content: 'Something new happened!', openUrl: '/' };
+        const unreadCount = data.unreadCount;
 
-    const options = {
-        body: data.content,
-        icon: '/icons/icon-512.png',
-        badge: '/icons/icon-512.png',
-        data: {
-            url: data.openUrl
+        if (navigator.setAppBadge) {
+            if (unreadCount && unreadCount > 0) {
+                navigator.setAppBadge(unreadCount);
+            } else {
+                navigator.clearAppBadge();
+            }
         }
-    };
 
-    event.waitUntil(
-        self.registration.showNotification(data.title, options)
-    );
+        const options = {
+            body: data.content,
+            icon: '/icons/icon-512.png',
+            badge: '/icons/icon-512.png',
+            data: {
+                url: data.openUrl
+            }
+        };
+
+        event.waitUntil(
+            self.registration.showNotification(data.title, options)
+        );
+
+    }
 });
