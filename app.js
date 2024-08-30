@@ -1,27 +1,20 @@
 const enableNotificationsButton = document.querySelector(".notifications");
 
-
 if ("Notification" in window && 'serviceWorker' in navigator) {
     enableNotificationsButton.addEventListener("click", askForNotificationPermission);
 }
 
-function displayConfirmNotification() {
-    if ('serviceWorker' in navigator) {
-        const options = {
-            body: 'You successfully subscribed',
-            icon: '/icons/icon-512.png',
-            badge: '/icons/icon-512.png',
-            tag: 'confirm-notification',
-            renotify: true,
-            actions: [
-                { action: 'confirm', title: 'Okay', icon: '/icons/icon-512.png' },
-                { action: 'cancel', title: 'Cancel', icon: '/icons/icon-512.png' },
-            ]
-        };
-        navigator.serviceWorker.ready.then((swreg) => {
-            swreg.showNotification('Successfully subscribed from SW', options);
-        })
-    }
+function askForNotificationPermission() {
+    Notification.requestPermission((res) => {
+        console.log(res);
+
+        if (res !== 'granted') {
+            console.log('No notification permission granted!');
+        } else {
+            configurePushSub();
+            //displayConfirmNotification();
+        }
+    });
 }
 
 function configurePushSub() {
@@ -36,7 +29,6 @@ function configurePushSub() {
             return swreg.pushManager.getSubscription();
         }).then((sub) => {
             if (sub === null) {
-                
                 // Create a new subscription
                 const vapidPublicKey = 'BBTEbxoHqW7fW7UL4n62xA5OKp0g1vuJJVZrZH73sCwlhj6e4xyOY00cLxGVvqYeJokG3CdOZcDkQBnGvZ9QHcw';
                 const convertedVapidPublicKey = urlB64ToUint8Array(vapidPublicKey);
@@ -46,7 +38,6 @@ function configurePushSub() {
                     applicationServerKey: convertedVapidPublicKey
                 });
             } else {
-                
                 // We have a subscription
             }
         }).then((newSub) => {            
@@ -60,26 +51,31 @@ function configurePushSub() {
             })
         }).then((res) => {
             if (res.ok) {
-                displayConfirmNotification();
+                // displayConfirmNotification();
             }
         }).catch((error) => {
             console.warn(error);
-            
         })
 };
 
-function askForNotificationPermission() {
-    Notification.requestPermission((res) => {
-        console.log(res);
-
-        if (res !== 'granted') {
-            console.log('No notification permission granted!');
-        } else {
-            configurePushSub();
-            //displayConfirmNotification();
-        }
-    });
-}
+// function displayConfirmNotification() {
+//     if ('serviceWorker' in navigator) {
+//         const options = {
+//             body: 'You successfully subscribed',
+//             icon: '/icons/icon-512.png',
+//             badge: '/icons/icon-512.png',
+//             tag: 'confirm-notification',
+//             renotify: true,
+//             actions: [
+//                 { action: 'confirm', title: 'Okay', icon: '/icons/icon-512.png' },
+//                 { action: 'cancel', title: 'Cancel', icon: '/icons/icon-512.png' },
+//             ]
+//         };
+//         navigator.serviceWorker.ready.then((swreg) => {
+//             swreg.showNotification('Successfully subscribed from SW', options);
+//         })
+//     }
+// }
 
 function urlB64ToUint8Array(base64String) {
     const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
