@@ -3,7 +3,7 @@ if ("Notification" in window && 'serviceWorker' in navigator) {
 }
 
 function askForNotificationPermission() {
-    Notification.requestPermission((res) => {
+    Promise.resolve(Notification.requestPermission()).then((res) => {
         console.log(res);
 
         if (res !== 'granted') {
