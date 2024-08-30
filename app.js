@@ -1,9 +1,11 @@
+const enableNotificationsButton = document.querySelector(".notifications");
+
 if ("Notification" in window && 'serviceWorker' in navigator) {
-    askForNotificationPermission();
+    enableNotificationsButton.addEventListener("click", askForNotificationPermission);
 }
 
 function askForNotificationPermission() {
-    Promise.resolve(Notification.requestPermission()).then((res) => {
+    Notification.requestPermission((res) => {
         console.log(res);
 
         if (res !== 'granted') {
