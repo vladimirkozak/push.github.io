@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const pushButton = document.querySelector('#pushButton');
+    const vapidPublicKey = 'BBTEbxoHqW7fW7UL4n62xA5OKp0g1vuJJVZrZH73sCwlhj6e4xyOY00cLxGVvqYeJokG3CdOZcDkQBnGvZ9QHcw';
+
     if (!pushButton) {
         return;
     }
@@ -33,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }).then((sub) => {
                 if (sub === null) {
                     // Create a new subscription
-                    const vapidPublicKey = 'BBTEbxoHqW7fW7UL4n62xA5OKp0g1vuJJVZrZH73sCwlhj6e4xyOY00cLxGVvqYeJokG3CdOZcDkQBnGvZ9QHcw';
                     const convertedVapidPublicKey = urlB64ToUint8Array(vapidPublicKey);
 
                     return reg.pushManager.subscribe({
@@ -61,7 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
             })
     };
 
-
 });
 
 function urlB64ToUint8Array(base64String) {
@@ -74,3 +74,14 @@ function urlB64ToUint8Array(base64String) {
     }
     return outputArray;
 }
+
+const download = document.querySelector('#file');
+
+download.addEventListener('click', () => {
+    const link = document.createElement('a');
+    link.setAttribute('href', './files/example.xlsx');
+    link.setAttribute('download', 'example.xlsx');
+    var event = document.createEvent("MouseEvents");
+    event.initMouseEvent("click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+    link.dispatchEvent(event);
+});
