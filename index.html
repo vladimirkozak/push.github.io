@@ -6,6 +6,8 @@
     <title>Document</title>
     <link rel="manifest" href="app.webmanifest" />
     <link rel="stylesheet" href="./styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pulltorefreshjs/0.1.22/index.umd.min.js
+  "></script>
 </head>
 <body>
     <button id="pushButton" class="notifications">notifications</button>
@@ -15,6 +17,7 @@
     <input type="text">
 
     <script src="sw-register.js"></script>
-    <script src="app.js"></script>
+    <script type="module" src="./app.js"></script>
+    
 </body>
 </html>

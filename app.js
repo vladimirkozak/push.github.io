@@ -2,6 +2,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const pushButton = document.querySelector('#pushButton');
     const vapidPublicKey = 'BBTEbxoHqW7fW7UL4n62xA5OKp0g1vuJJVZrZH73sCwlhj6e4xyOY00cLxGVvqYeJokG3CdOZcDkQBnGvZ9QHcw';
 
+    PullToRefresh.init({
+        mainElement: 'body',
+        onRefresh() {
+            console.log(4);
+            window.location.reload();
+        }
+    });
+
     if (!pushButton) {
         return;
     }
@@ -85,3 +93,4 @@ download.addEventListener('click', () => {
     event.initMouseEvent("click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
     link.dispatchEvent(event);
 });
+
